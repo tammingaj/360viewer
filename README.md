@@ -11,7 +11,7 @@ A lightweight, dependency-free TypeScript library that displays 360° (equirecta
 ## Install
 
 ```bash
-npm install 360viewer
+npm install @tamminjp/360viewer
 ```
 
 Or load the UMD build with a script tag; the library is then available as `Viewer360Lib`:
@@ -30,7 +30,7 @@ Or load the UMD build with a script tag; the library is then available as `Viewe
 ```
 
 ```ts
-import { Viewer360 } from '360viewer';
+import { Viewer360 } from '@tamminjp/360viewer';
 
 const viewer = new Viewer360('#pano', {
   scenes: [
