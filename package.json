@@ -1,0 +1,35 @@
+{
+  "name": "360viewer",
+  "version": "0.1.0",
+  "description": "Lightweight, dependency-free TypeScript library to display 360° photos with clickable hotspots for navigation, tooltips and custom actions.",
+  "keywords": ["360", "panorama", "equirectangular", "virtual tour", "webgl", "hotspots", "viewer"],
+  "license": "MIT",
+  "author": "Jan Peter Tamminga",
+  "type": "module",
+  "main": "./dist/360viewer.umd.cjs",
+  "module": "./dist/360viewer.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/360viewer.js",
+      "require": "./dist/360viewer.umd.cjs"
+    }
+  },
+  "files": ["dist", "README.md", "LICENSE"],
+  "sideEffects": false,
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -p tsconfig.build.json && vite build",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "jsdom": "^25.0.1",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10",
+    "vitest": "^2.1.4"
+  }
+}
