@@ -7,7 +7,7 @@ A dependency-free TypeScript library that displays 360° (equirectangular) photo
 - `Viewer.ts`: public `Viewer360` class. Manages scenes, hotspots, camera (yaw/pitch/fov in degrees), the render loop (renders only when something changed), cross-fade scene transitions, auto-rotate and events.
 - `Renderer.ts`: raw WebGL 1 renderer. Draws one full-screen triangle; the fragment shader casts a ray per pixel and samples the equirectangular texture. No mipmaps, to avoid a seam where atan() wraps. Downscales images larger than MAX_TEXTURE_SIZE and handles context loss.
 - `HotspotLayer.ts`: hotspots are DOM elements laid over the canvas, positioned each frame through `projectToScreen`, so they're CSS-styleable, keyboard-focusable and accessible.
-- `Controls.ts`: pointer drag with inertia, pinch, wheel zoom, keyboard (arrows/WASD, +/-), and click-vs-drag detection.
+- `Controls.ts`: pointer drag with inertia, pinch, wheel zoom, trackpad two-finger swipe to look around (told apart from a mouse wheel by a heuristic in `isTrackpadSwipe`; ctrl+wheel is a trackpad pinch), keyboard (arrows/WASD, +/-), and click-vs-drag detection.
 - `math.ts`: spherical math. The shader in Renderer.ts mirrors `cameraToWorld`, so keep them in sync. Conventions: +y is up, yaw 0 / pitch 0 looks down -z, and +yaw turns right.
 - `imageLoader.ts`: LRU-cached image loading and decoding.
 - `styles.ts`: default CSS, injected once and overridable through `--pv-*` custom properties.

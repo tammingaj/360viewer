@@ -3,7 +3,7 @@
 A lightweight, dependency-free TypeScript library that displays 360° (equirectangular) photos in the browser, with clickable hotspots that navigate to other photos, show tooltips, or trigger your own code.
 
 - No dependencies; plain WebGL 1, so it runs on practically every browser and device
-- Mouse, touch (drag and pinch), wheel and keyboard controls, with inertia
+- Mouse, touch (drag and pinch), trackpad (two-finger swipe and pinch), wheel and keyboard controls, with inertia
 - Hotspots are real DOM elements: style them with CSS, focus them with the keyboard, read them with a screen reader
 - Cross-fade transitions between scenes, auto-rotate, animated camera moves
 - Typed API and events
@@ -126,10 +126,13 @@ new Viewer360(container, options);
 | `keyboard` | `true` | Arrow keys or WASD to look, `+` / `-` to zoom, while the viewer has focus. |
 | `inertia` | `true` | Keep moving after a drag is released. |
 | `dragSensitivity` | `1` | Multiplier for drag speed. |
+| `trackpadRotate` | `true` | Look around with a two-finger swipe on a trackpad; pinch still zooms. `false` makes every wheel event zoom. See the note below. |
 | `crossOrigin` | `'anonymous'` | `crossOrigin` attribute for images loaded from URLs. `null` leaves it unset. |
 | `showLoader` | `true` | Show a spinner while an image loads. |
 | `preloadLinkedScenes` | `true` | Preload the images that the current scene's hotspots link to. |
 | `className` | | Extra class on the root element. |
+
+Browsers don't report whether a wheel event comes from a mouse wheel or a trackpad, so `trackpadRotate` guesses from the size and direction of the scroll. A mouse that scrolls in very small steps (some do on macOS) can be mistaken for a trackpad and look up and down instead of zooming; set `trackpadRotate: false` if that matters more to you than the swipe.
 
 Animated moves and the cross-fade are skipped for users who have `prefers-reduced-motion` set.
 

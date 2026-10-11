@@ -19,6 +19,7 @@ export interface ControlsOptions {
   keyboard: boolean;
   inertia: boolean;
   dragSensitivity: number;
+  trackpadRotate: boolean;
 }
 
 interface PointerInfo {
@@ -29,6 +30,8 @@ interface PointerInfo {
 const CLICK_TOLERANCE_PX = 6;
 const KEY_SPEED = 75; // degrees per second
 const KEY_ZOOM_SPEED = 1.6; // fov multiplier per second
+const MOUSE_WHEEL_MIN_STEP_PX = 40; // one notch of a mouse wheel is at least this much
+const WHEEL_GESTURE_GAP_MS = 200; // wheel events closer together belong to one gesture
 
 /** Mouse, touch, pen, wheel and keyboard input. */
 export class Controls {
@@ -39,6 +42,7 @@ export class Controls {
   /** Inertia velocity in degrees per millisecond. */
   private velocity = { yaw: 0, pitch: 0 };
   private keys = new Set<string>();
+  private wheelGesture: { trackpad: boolean; time: number } | null = null;
   private disposers: Array<() => void> = [];
 
   constructor(
@@ -233,14 +237,51 @@ export class Controls {
   // ---------------------------------------------------------------- wheel
 
   private onWheel = (e: WheelEvent): void => {
+    const view = this.host.getView();
+
+    // A two-finger swipe on a trackpad looks around, like a drag.
+    if (this.options.trackpadRotate && !e.ctrlKey && this.isTrackpadSwipe(e)) {
+      if (!this.options.draggable) return;
+      e.preventDefault();
+      this.stopInertia();
+      this.host.onUserInteraction();
+      const height = this.host.element.clientHeight || 1;
+      const degPerPx = (view.fov / height) * this.options.dragSensitivity;
+      this.host.applyView({
+        yaw: view.yaw + e.deltaX * degPerPx,
+        pitch: view.pitch - e.deltaY * degPerPx,
+      });
+      return;
+    }
+
     if (!this.options.zoom) return;
     e.preventDefault();
     this.host.onUserInteraction();
     // Normalise line/page deltas to pixels.
     const delta = e.deltaY * (e.deltaMode === 1 ? 33 : e.deltaMode === 2 ? 400 : 1);
-    const view = this.host.getView();
-    this.host.applyView({ fov: view.fov * Math.exp(delta * 0.0015) });
+    // Browsers report a trackpad pinch as ctrl + wheel, with much smaller deltas.
+    const speed = e.ctrlKey && e.deltaMode === 0 ? 0.01 : 0.0015;
+    this.host.applyView({ fov: view.fov * Math.exp(delta * speed) });
   };
+
+  /**
+   * Browsers don't say whether a wheel event comes from a mouse wheel or a
+   * trackpad, so guess: a trackpad sends pixel deltas that are small or have a
+   * horizontal part, a mouse wheel sends big vertical steps. The guess is made
+   * at the start of a gesture and kept for its duration, so the shrinking
+   * deltas of a wheel's tail or a fast swipe's peak don't flip it.
+   */
+  private isTrackpadSwipe(e: WheelEvent): boolean {
+    const now = performance.now();
+    const g = this.wheelGesture;
+    let trackpad: boolean;
+    if (e.deltaMode !== 0) trackpad = false;
+    else if (e.deltaX !== 0) trackpad = true;
+    else if (g && now - g.time < WHEEL_GESTURE_GAP_MS) trackpad = g.trackpad;
+    else trackpad = Math.abs(e.deltaY) < MOUSE_WHEEL_MIN_STEP_PX;
+    this.wheelGesture = { trackpad, time: now };
+    return trackpad;
+  }
 
   // ---------------------------------------------------------------- keyboard
 

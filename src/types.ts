@@ -113,6 +113,12 @@ export interface ViewerOptions {
   inertia?: boolean;
   /** Multiplier for drag speed. Default 1. */
   dragSensitivity?: number;
+  /**
+   * Look around with a two-finger swipe on a trackpad (pinch still zooms).
+   * Trackpads are told apart from mouse wheels by a heuristic; set to false to
+   * make every wheel event zoom. Default true.
+   */
+  trackpadRotate?: boolean;
   /** `crossOrigin` attribute for images loaded from URLs. Default `'anonymous'`. */
   crossOrigin?: '' | 'anonymous' | 'use-credentials' | null;
   /** Extra CSS class on the root element. */

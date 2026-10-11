@@ -108,6 +108,7 @@ export class Viewer360 extends EventEmitter<ViewerEvents> implements ViewerLike 
       draggable: true,
       inertia: true,
       dragSensitivity: 1,
+      trackpadRotate: true,
       crossOrigin: 'anonymous',
       showLoader: true,
       preloadLinkedScenes: true,
@@ -157,6 +158,7 @@ export class Viewer360 extends EventEmitter<ViewerEvents> implements ViewerLike 
         keyboard: this.options.keyboard,
         inertia: this.options.inertia,
         dragSensitivity: this.options.dragSensitivity,
+        trackpadRotate: this.options.trackpadRotate,
       },
     );
 
@@ -378,7 +380,7 @@ export class Viewer360 extends EventEmitter<ViewerEvents> implements ViewerLike 
       Pick<
         ViewerOptions,
         | 'minFov' | 'maxFov' | 'minPitch' | 'maxPitch' | 'keyboard' | 'zoom' | 'draggable'
-        | 'inertia' | 'dragSensitivity' | 'transitionDuration' | 'autoRotate' | 'autoRotateDelay'
+        | 'inertia' | 'dragSensitivity' | 'trackpadRotate' | 'transitionDuration' | 'autoRotate' | 'autoRotateDelay'
       >
     >,
   ): void {
@@ -389,6 +391,7 @@ export class Viewer360 extends EventEmitter<ViewerEvents> implements ViewerLike 
       draggable: this.options.draggable,
       inertia: this.options.inertia,
       dragSensitivity: this.options.dragSensitivity,
+      trackpadRotate: this.options.trackpadRotate,
     });
     this.applyView(this.view);
     this.invalidate();
