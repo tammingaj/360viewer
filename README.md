@@ -8,6 +8,8 @@ A lightweight, dependency-free TypeScript library that displays 360° (equirecta
 - Cross-fade transitions between scenes, auto-rotate, animated camera moves
 - Typed API and events
 
+See it in use in a real web app: [Look Inside](https://slow.web.app/look-inside).
+
 ## Install
 
 ```bash
