@@ -5,6 +5,14 @@
   "keywords": ["360", "panorama", "equirectangular", "virtual tour", "webgl", "hotspots", "viewer"],
   "license": "MIT",
   "author": "Jan Peter Tamminga",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tammingaj/360viewer.git"
+  },
+  "homepage": "https://github.com/tammingaj/360viewer#readme",
+  "bugs": {
+    "url": "https://github.com/tammingaj/360viewer/issues"
+  },
   "type": "module",
   "main": "./dist/360viewer.umd.cjs",
   "module": "./dist/360viewer.js",
